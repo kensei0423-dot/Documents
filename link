@@ -11,3 +11,6 @@ https://developer.paypal.com/docs/api/orders/v2/
 
 save payment PayPal (vault):
 https://developer.paypal.com/docs/checkout/save-payment-methods/during-purchase/orders-api/paypal/
+
+get capture id
+https://api-m.sandbox.paypal.com/v2/payments/captures/{capture_id}
