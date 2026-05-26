@@ -1,0 +1,10 @@
+ios:
+https://developer.paypal.com/docs/checkout/advanced/ios/
+https://github.com/paypal/paypal-ios/
+
+android:
+https://developer.paypal.com/docs/checkout/advanced/android/#web-payments
+https://github.com/paypal/paypal-android
+
+server:
+https://developer.paypal.com/docs/api/orders/v2/
