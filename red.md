@@ -1,4 +1,55 @@
-Task Completed
+Red Pay Demo — 项目概览
+这是一个 PayPal Android 支付 Demo，模拟类似小红书/电商 App 的购物支付体验。
+
+📁 项目结构
+部分	说明
+server.js	Node.js 后端，运行在 port 3002
+app/	Android 原生应用（Kotlin + Jetpack Compose）
+db.json	本地数据库（配置 + vault tokens）
+.env	环境变量（PayPal 账号凭证）
+paypal-android-main/	PayPal Android SDK 源码参考
+paypal-ios-main/	PayPal iOS SDK 源码参考
+🖥️ 后端 API（server.js）
+接口	功能
+GET /api/config	获取配置（useVault、force3ds、currency 等）
+POST /api/orders/create	创建 PayPal 订单
+POST /api/orders/capture	捕获订单，自动保存 vault token
+POST /api/orders/charge-vault	Vault 直接扣款（无需跳转 PayPal）
+GET/POST/DELETE /api/vault-tokens	管理已保存的支付方式
+GET /admin	管理后台页面
+GET /plm	Pay Later Messaging WebView 页面
+📱 Android 应用（Kotlin + Compose）
+支持 3 种支付方式：
+
+PayPal — Chrome Custom Tab 跳转，支持 Vault 保存
+Pay Later (BNPL) — 分期付款，集成 PLM 消息组件
+Card (ACDC) — 原生卡号输入，支持 3DS 验证 + Vault 保存
+核心文件：
+
+MainActivity.kt — 商品页面 + 支付流程控制
+PaymentBottomSheet.kt — 支付底部弹窗 UI
+PayPalManager.kt — PayPal Web Checkout 管理
+CardManager.kt — ACDC 卡支付 + 3DS 管理
+⚙️ 当前配置（db.json）
+配置项	当前值
+活跃账号	HK（港区账号）
+货币	USD
+Vault 模式	✅ 开启
+Force 3DS	✅ 开启
+Buyer Country	US
+分期 UI	❌ 关闭
+4 个 PayPal 沙盒账号： NL、C2、HK、US
+
+🔧 SDK 版本（build.gradle.kts）
+
+paypal-web-payments: 2.3.0
+card-payments: 2.3.0
+paypal-messages: 1.3.0
+payment-buttons: 2.0.0
+🚀 启动方式
+后端：cd demo/red && node server.js（port 3002）
+Android：用 Android Studio 打开 demo/red/ 目录，连接模拟器运行
+管理后台：浏览器访问 http://localhost:3002/admin
 
 # PayPal Mobile SDK 在 Red 项目中的完整使用说明
 
