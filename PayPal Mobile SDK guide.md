@@ -1,63 +1,92 @@
-Red Pay Demo — 项目概览
+# Red Pay Demo — 项目概览
+
 这是一个 PayPal Android 支付 Demo，模拟类似小红书/电商 App 的购物支付体验。
-
-📁 项目结构
-部分	说明
-server.js	Node.js 后端，运行在 port 3002
-app/	Android 原生应用（Kotlin + Jetpack Compose）
-db.json	本地数据库（配置 + vault tokens）
-.env	环境变量（PayPal 账号凭证）
-paypal-android-main/	PayPal Android SDK 源码参考
-paypal-ios-main/	PayPal iOS SDK 源码参考
-🖥️ 后端 API（server.js）
-接口	功能
-GET /api/config	获取配置（useVault、force3ds、currency 等）
-POST /api/orders/create	创建 PayPal 订单
-POST /api/orders/capture	捕获订单，自动保存 vault token
-POST /api/orders/charge-vault	Vault 直接扣款（无需跳转 PayPal）
-GET/POST/DELETE /api/vault-tokens	管理已保存的支付方式
-GET /admin	管理后台页面
-GET /plm	Pay Later Messaging WebView 页面
-📱 Android 应用（Kotlin + Compose）
-支持 3 种支付方式：
-
-PayPal — Chrome Custom Tab 跳转，支持 Vault 保存
-Pay Later (BNPL) — 分期付款，集成 PLM 消息组件
-Card (ACDC) — 原生卡号输入，支持 3DS 验证 + Vault 保存
-核心文件：
-
-MainActivity.kt — 商品页面 + 支付流程控制
-PaymentBottomSheet.kt — 支付底部弹窗 UI
-PayPalManager.kt — PayPal Web Checkout 管理
-CardManager.kt — ACDC 卡支付 + 3DS 管理
-⚙️ 当前配置（db.json）
-配置项	当前值
-活跃账号	HK（港区账号）
-货币	USD
-Vault 模式	✅ 开启
-Force 3DS	✅ 开启
-Buyer Country	US
-分期 UI	❌ 关闭
-4 个 PayPal 沙盒账号： NL、C2、HK、US
-
-🔧 SDK 版本（build.gradle.kts）
-
-paypal-web-payments: 2.3.0
-card-payments: 2.3.0
-paypal-messages: 1.3.0
-payment-buttons: 2.0.0
-🚀 启动方式
-后端：cd demo/red && node server.js（port 3002）
-Android：用 Android Studio 打开 demo/red/ 目录，连接模拟器运行
-管理后台：浏览器访问 http://localhost:3002/admin
-
-# PayPal Mobile SDK 在 Red 项目中的完整使用说明
 
 ---
 
+## 📁 项目结构
+
+| 部分 | 说明 |
+|------|------|
+| `server.js` | Node.js 后端，运行在 port 3002 |
+| `app/` | Android 原生应用（Kotlin + Jetpack Compose） |
+| `db.json` | 本地数据库（配置 + vault tokens） |
+| `.env` | 环境变量（PayPal 账号凭证） |
+| `paypal-android-main/` | PayPal Android SDK 源码参考 |
+| `paypal-ios-main/` | PayPal iOS SDK 源码参考 |
+
+---
+
+## 🖥️ 后端 API（server.js）
+
+| 接口 | 功能 |
+|------|------|
+| `GET /api/config` | 获取配置（useVault、force3ds、currency 等） |
+| `POST /api/orders/create` | 创建 PayPal 订单 |
+| `POST /api/orders/capture` | 捕获订单，自动保存 vault token |
+| `POST /api/orders/charge-vault` | Vault 直接扣款（无需跳转 PayPal） |
+| `GET/POST/DELETE /api/vault-tokens` | 管理已保存的支付方式 |
+| `GET /admin` | 管理后台页面 |
+| `GET /plm` | Pay Later Messaging WebView 页面 |
+
+---
+
+## 📱 Android 应用（Kotlin + Compose）
+
+支持 3 种支付方式：
+
+- **PayPal** — Chrome Custom Tab 跳转，支持 Vault 保存
+- **Pay Later (BNPL)** — 分期付款，集成 PLM 消息组件
+- **Card (ACDC)** — 原生卡号输入，支持 3DS 验证 + Vault 保存
+
+核心文件：
+
+- `MainActivity.kt` — 商品页面 + 支付流程控制
+- `PaymentBottomSheet.kt` — 支付底部弹窗 UI
+- `PayPalManager.kt` — PayPal Web Checkout 管理
+- `CardManager.kt` — ACDC 卡支付 + 3DS 管理
+
+---
+
+## ⚙️ 当前配置（db.json）
+
+| 配置项 | 当前值 |
+|--------|--------|
+| 活跃账号 | HK（港区账号） |
+| 货币 | USD |
+| Vault 模式 | ✅ 开启 |
+| Force 3DS | ✅ 开启 |
+| Buyer Country | US |
+| 分期 UI | ❌ 关闭 |
+
+4 个 PayPal 沙盒账号：NL、C2、HK、US
+
+---
+
+## 🔧 SDK 版本（build.gradle.kts）
+
+| 模块 | 版本 |
+|------|------|
+| `paypal-web-payments` | 2.3.0 |
+| `card-payments` | 2.3.0 |
+| `paypal-messages` | 1.3.0 |
+| `payment-buttons` | 2.0.0 |
+
+---
+
+## 🚀 启动方式
+
+- **后端**：`cd demo/red && node server.js`（port 3002）
+- **Android**：用 Android Studio 打开 `demo/red/` 目录，连接模拟器运行
+- **管理后台**：浏览器访问 `http://localhost:3002/admin`
+
+---
+
+# PayPal Mobile SDK 在 Red 项目中的完整使用说明
+
 ## 一、SDK 依赖配置
 
-__文件：`app/build.gradle.kts`__
+文件：`app/build.gradle.kts`
 
 ```kotlin
 // PayPal Web Checkout（Chrome Custom Tab 跳转）
@@ -77,7 +106,7 @@ implementation("com.paypal.android:payment-buttons:2.0.0")
 
 ## 二、AndroidManifest 配置
 
-__文件：`app/src/main/AndroidManifest.xml`__
+文件：`app/src/main/AndroidManifest.xml`
 
 ```xml
 <!-- 网络权限 -->
@@ -100,13 +129,13 @@ __文件：`app/src/main/AndroidManifest.xml`__
     </intent-filter>
 ```
 
-> ⚠️ __关键__：`android:scheme` 必须与 server.js 中的 `RETURN_URL` 和 `PayPalManager.kt` 中的 `RETURN_URL` 完全一致。
+> ⚠️ 关键：`android:scheme` 必须与 `server.js` 中的 `RETURN_URL` 和 `PayPalManager.kt` 中的 `RETURN_URL` 完全一致。
 
 ---
 
 ## 三、全局常量
 
-__文件：`PayPalManager.kt`（第 16-18 行）__
+文件：`PayPalManager.kt`（第 16-18 行）
 
 ```kotlin
 const val PAYPAL_CLIENT_ID = "AUbSpUcLCXCQMo5Tqqz4sv4d56ALQxpYua7eaPHNChuy..."
@@ -118,7 +147,7 @@ const val RETURN_URL = "com.demo.red"            // Deep Link scheme
 
 ## 四、模块一：PayPal Web Checkout（Chrome Custom Tab）
 
-__文件：`PayPalManager.kt`__
+文件：`PayPalManager.kt`
 
 ### 4.1 初始化
 
@@ -150,7 +179,7 @@ client.start(activity, request, PayPalWebStartCallback { result ->
 
 ### 4.3 处理回调（onNewIntent + onResume）
 
-__文件：`MainActivity.kt`（第 59-72 行）__
+文件：`MainActivity.kt`（第 59-72 行）
 
 ```kotlin
 override fun onNewIntent(intent: Intent) {
@@ -166,7 +195,7 @@ override fun onResume() {
 }
 ```
 
-__文件：`PayPalManager.kt`（第 55-101 行）__
+文件：`PayPalManager.kt`（第 55-101 行）
 
 ```kotlin
 fun handleIntent(intent: Intent) {
@@ -224,7 +253,7 @@ payPalManager.startCheckout(
 
 ## 五、模块二：Card Payments（ACDC 原生卡支付）
 
-__文件：`CardManager.kt`__
+文件：`CardManager.kt`
 
 ### 5.1 初始化
 
@@ -266,7 +295,7 @@ cardClient.approveOrder(request, CardApproveOrderCallback { result ->
 
 ### 5.3 处理 3DS 回调
 
-__文件：`CardManager.kt`（第 82-122 行）__
+文件：`CardManager.kt`（第 82-122 行）
 
 ```kotlin
 fun handleIntent(activity: Activity, intent: Intent) {
@@ -323,7 +352,7 @@ private suspend fun checkAuthAndCapture(orderID: String, context: Context?) {
 
 ## 六、模块三：Pay Later Messaging（PLM）
 
-__文件：`PaymentBottomSheet.kt`（第 315-342 行）__
+文件：`PaymentBottomSheet.kt`（第 315-342 行）
 
 ```kotlin
 AndroidView(
@@ -351,13 +380,13 @@ AndroidView(
 )
 ```
 
-> PLM 组件会根据 `amount` + `buyerCountry` 自动显示分期信息文案。
+PLM 组件会根据 `amount` + `buyerCountry` 自动显示分期信息文案。
 
 ---
 
 ## 七、模块四：Payment Buttons（官方品牌按钮）
 
-__文件：`PaymentBottomSheet.kt`（第 546-567 行）__
+文件：`PaymentBottomSheet.kt`（第 546-567 行）
 
 ```kotlin
 // PayPal 按钮
@@ -391,7 +420,7 @@ AndroidView(
 
 ### 8.1 保存 PayPal 账号
 
-__后端 server.js（第 221-237 行）__ — 创建订单时加入 vault 参数：
+后端 `server.js`（第 221-237 行）— 创建订单时加入 vault 参数：
 
 ```json
 "payment_source": {
@@ -404,9 +433,9 @@ __后端 server.js（第 221-237 行）__ — 创建订单时加入 vault 参数
 }
 ```
 
-__后端 capture 后自动提取 vault token（server.js 第 353-372 行）__，保存到 `db.json`。
+后端 capture 后自动提取 vault token（`server.js` 第 353-372 行），保存到 `db.json`。
 
-__Android 端（MainActivity.kt 第 595-611 行）__ — capture 响应中提取并存入 SharedPreferences：
+Android 端（`MainActivity.kt` 第 595-611 行）— capture 响应中提取并存入 SharedPreferences：
 
 ```kotlin
 context.getSharedPreferences("red_prefs", MODE_PRIVATE).edit()
@@ -417,7 +446,7 @@ context.getSharedPreferences("red_prefs", MODE_PRIVATE).edit()
 
 ### 8.2 Vault 直接扣款（无需跳转 PayPal）
 
-__后端（server.js 第 90-152 行）__：
+后端（`server.js` 第 90-152 行）：
 
 ```json
 "payment_source": {
@@ -425,7 +454,7 @@ __后端（server.js 第 90-152 行）__：
 }
 ```
 
-__Android 端（MainActivity.kt 第 304-311 行）__：
+Android 端（`MainActivity.kt` 第 304-311 行）：
 
 ```kotlin
 if (useVaultId != null) {
@@ -438,7 +467,7 @@ if (useVaultId != null) {
 
 ## 九、完整数据流图
 
-```javascript
+```text
 用户点击 Buy Now
     │
     ▼
