@@ -14,3 +14,22 @@ https://developer.paypal.com/docs/checkout/save-payment-methods/during-purchase/
 
 get capture id
 https://api-m.sandbox.paypal.com/v2/payments/captures/{capture_id}
+
+sandbox webhook
+173.0.82.0/24
+
+live webhook
+64.4.240.0/21
+64.4.248.0/22
+66.211.168.0/22
+173.0.80.0/20
+91.243.72.0/23
+
+sandbox api:
+173.0.93.0/24 + Fastly 的 151.101.1.35、151.101.65.35、151.101.129.35、151.101.193.35 
+
+live api:
+64.4.248.0/22
+66.211.168.0/22
+173.0.80.0/20
+151.101.0.0/16（Fastly CDN）
