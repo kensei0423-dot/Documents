@@ -1,0 +1,32 @@
+模式	shipping.type	shipping_preference	说明
+自提（Pickup）	PICKUP_IN_STORE	SET_PROVIDED_ADDRESS	锁定到门店地址，买家不能改
+full_name 必须以 S2S 开头
+
+{
+  intent: 'CAPTURE',                          // ① 必须
+  purchase_units: [{
+    amount: {                                 // ② 必须
+      currency_code: 'GBP',
+      value: '120.00',                        // 总额 = 商品 + 运费
+      breakdown: {                            // ③ 有运费时必须（item_total + shipping 之和要等于 value）
+        item_total: { currency_code: 'GBP', value: '120.00' },
+        shipping:   { currency_code: 'GBP', value: '0.00' }
+      }
+    },
+    shipping: {                               // ④ BOPIS 关键
+      type: 'PICKUP_IN_STORE',                //    自提模式的核心标识
+      name: { full_name: 'S2S 门店名' },
+      address: { ... }                        //    门店地址
+    }
+  }],
+  payment_source: {
+    paypal: {
+      experience_context: {
+        shipping_preference: 'SET_PROVIDED_ADDRESS',  // ⑤ 自提锁定地址
+        user_action: 'PAY_NOW',
+        return_url: '...',
+        cancel_url: '...'
+      }
+    }
+  }
+}
