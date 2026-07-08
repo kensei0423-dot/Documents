@@ -15,6 +15,9 @@ https://developer.paypal.com/docs/checkout/save-payment-methods/during-purchase/
 get capture id
 https://api-m.sandbox.paypal.com/v2/payments/captures/{capture_id}
 
+get balance
+https://developer.paypal.com/api/transaction-search/v1/balances-get
+
 sandbox webhook
 173.0.82.0/24
 
